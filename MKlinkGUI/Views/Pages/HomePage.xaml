@@ -1,0 +1,78 @@
+﻿<Page
+  x:Class="MKlinkGUI.Views.Pages.HomePage"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:MKlinkGUI.Views.Pages"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+  Title="HomePage"
+  d:DataContext="{d:DesignInstance local:HomePage,
+                                     IsDesignTimeCreatable=False}"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+  ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+  Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+  mc:Ignorable="d"
+>
+    <Grid VerticalAlignment="Top" Cursor="">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" MaxWidth="1000"/>
+            <ColumnDefinition Width="Auto" MinWidth="120" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60" MinHeight="50" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <ui:TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" TextAlignment="Right" Padding="0,0,10,0">
+            源位置:
+        </ui:TextBlock>
+
+        <ui:TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" TextAlignment="Right" Padding="0,0,10,0">
+            目标位置:
+        </ui:TextBlock>
+
+        <ui:TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" TextAlignment="Right" Padding="0,0,10,0">
+            模式:
+        </ui:TextBlock>
+
+        <ui:TextBox x:Name="EditableFileAddressTextBox" PlaceholderText="选择源位置" Height="36" MinWidth="180"
+                    VerticalContentAlignment="Center" Margin="10,0,10,0" Grid.Column="1" />
+
+        <ui:Button Content="打开文件" Icon="{ui:SymbolIcon Symbol=FolderOpen24}" Height="36" Click="SelectFile_Click" Padding="20,0,20,0"
+                   Grid.Column="2" MinWidth="120" HorizontalContentAlignment="Left"/>
+
+        <ui:TextBox x:Name="EditableFileAddressTextBox2" PlaceholderText="选择目标位置" Height="36" MinWidth="180"
+                    VerticalContentAlignment="Center" Margin="10,0,10,0" Grid.Column="1" Grid.Row="1" Cursor="IBeam"/>
+
+        <ui:Button Content="打开文件" Icon="{ui:SymbolIcon Symbol=FolderOpen24}" Height="36" Click="SelectFile_Click" Padding="20,0,20,0"
+                   Grid.Column="2" HorizontalContentAlignment="Left" Grid.Row="1" MinWidth="120" />
+
+        <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left" MinWidth="300">
+            <RadioButton
+                    Content="符号链接 /D" Padding="10,0,20,0"
+                    GroupName="radio_group_one" IsChecked="True"
+                    ToolTip="@todo" />
+            <RadioButton
+                    Content="目录链接 /J" Padding="20,0,20,0"
+                    GroupName="radio_group_one" 
+                    ToolTip="@todo" />
+            <RadioButton
+                    Content="硬链接 /H" Padding="20,0,20,0"
+                    GroupName="radio_group_one" 
+                    ToolTip="@todo" />
+        </StackPanel>
+
+        <ui:ToggleSwitch Grid.Column="2" Grid.Row="2" OffContent="文件" OnContent="文件夹" IsChecked="True"/>
+
+        <ui:Button Content="运行" Icon="{ui:SymbolIcon Symbol=TriangleRight32}" Height="60"
+                   Click="SelectFile_Click" Padding="20,0,20,0" Grid.Column="1" Margin="10"
+                   HorizontalAlignment="Center" Grid.Row="3" MinWidth="360" Appearance="Primary"/>
+    </Grid>
+
+</Page>

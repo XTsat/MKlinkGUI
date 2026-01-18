@@ -15,7 +15,7 @@ namespace MKlinkGUI.ViewModels.Windows
             {
                 Content = "主页",
                 Icon = new SymbolIcon { Symbol = SymbolRegular.Home24 },
-                TargetPageType = typeof(Views.Pages.DashboardPage)
+                TargetPageType = typeof(Views.Pages.HomePage)
             },
             //new NavigationViewItem()
             //{
