@@ -16,16 +16,35 @@
   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
   mc:Ignorable="d"
 >
+    <Page.Resources>
+        <Style x:Key="OpenButtonTextStyle" TargetType="TextBlock">
+            <Setter Property="Text" Value="打开文件"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsChecked, ElementName=FolderToggle}" Value="True">
+                    <Setter Property="Text" Value="打开文件夹"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="OpenButtonIconStyle" TargetType="ui:SymbolIcon">
+            <Setter Property="Symbol" Value="Document24"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsChecked, ElementName=FolderToggle}" Value="True">
+                    <Setter Property="Symbol" Value="FolderOpen24"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+    
     <Grid VerticalAlignment="Top" Cursor="">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" MaxWidth="1000"/>
-            <ColumnDefinition Width="Auto" MinWidth="120" />
+            <ColumnDefinition Width="Auto" MinWidth="126" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60" MinHeight="50" />
-            <RowDefinition Height="60" />
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
             <RowDefinition/>
         </Grid.RowDefinitions>
 
@@ -41,17 +60,31 @@
             模式:
         </ui:TextBlock>
 
-        <ui:TextBox x:Name="EditableFileAddressTextBox" PlaceholderText="选择源位置" Height="36" MinWidth="180"
-                    VerticalContentAlignment="Center" Margin="10,0,10,0" Grid.Column="1" />
+        <ui:TextBox x:Name="SourceTextBox" PlaceholderText="选择源位置" Height="36" MinWidth="180"
+                    VerticalContentAlignment="Center" Margin="10,0,10,0" Grid.Column="1" Grid.Row="0"
+                    AllowDrop="True" Drop="TextBox_Drop" PreviewDragOver="TextBox_PreviewDragOver"/>
 
-        <ui:Button Content="打开文件" Icon="{ui:SymbolIcon Symbol=FolderOpen24}" Height="36" Click="SelectFile_Click" Padding="20,0,20,0"
-                   Grid.Column="2" MinWidth="120" HorizontalContentAlignment="Left"/>
+        <ui:Button x:Name="SourceOpenButton" Click="SelectFile_Click" Height="36" Padding="12,0,12,0" Grid.Row="0" Grid.Column="2" HorizontalContentAlignment="Left" >
+            <ui:Button.Content>
+                <TextBlock Style="{StaticResource OpenButtonTextStyle}"/>
+            </ui:Button.Content>
+            <ui:Button.Icon>
+                <ui:SymbolIcon Style="{StaticResource OpenButtonIconStyle}"/>
+            </ui:Button.Icon>
+        </ui:Button>
 
-        <ui:TextBox x:Name="EditableFileAddressTextBox2" PlaceholderText="选择目标位置" Height="36" MinWidth="180"
-                    VerticalContentAlignment="Center" Margin="10,0,10,0" Grid.Column="1" Grid.Row="1" Cursor="IBeam"/>
+        <ui:TextBox x:Name="TargetTextBox" PlaceholderText="选择目标位置" Height="36" MinWidth="180"
+                    VerticalContentAlignment="Center" Margin="10,0,10,0" Grid.Column="1" Grid.Row="1" 
+                    AllowDrop="True" Drop="TextBox_Drop" PreviewDragOver="TextBox_PreviewDragOver" Cursor="IBeam"/>
 
-        <ui:Button Content="打开文件" Icon="{ui:SymbolIcon Symbol=FolderOpen24}" Height="36" Click="SelectFile_Click" Padding="20,0,20,0"
-                   Grid.Column="2" HorizontalContentAlignment="Left" Grid.Row="1" MinWidth="120" />
+        <ui:Button x:Name="TargetOpenButton" Click="SelectFile_Click" Height="36" Padding="12,0,12,0" Grid.Row="1" Grid.Column="2" HorizontalContentAlignment="Left" >
+            <ui:Button.Content>
+                <TextBlock Style="{StaticResource OpenButtonTextStyle}"/>
+            </ui:Button.Content>
+            <ui:Button.Icon>
+                <ui:SymbolIcon Style="{StaticResource OpenButtonIconStyle}"/>
+            </ui:Button.Icon>
+        </ui:Button>
 
         <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left" MinWidth="300">
             <RadioButton
@@ -68,11 +101,20 @@
                     ToolTip="@todo" />
         </StackPanel>
 
-        <ui:ToggleSwitch Grid.Column="2" Grid.Row="2" OffContent="文件" OnContent="文件夹" IsChecked="True"/>
+        <ui:ToggleSwitch x:Name="FolderToggle" Grid.Column="2" Grid.Row="2" OffContent="文件" OnContent="文件夹" IsChecked="True"/>
 
-        <ui:Button Content="运行" Icon="{ui:SymbolIcon Symbol=TriangleRight32}" Height="60"
-                   Click="SelectFile_Click" Padding="20,0,20,0" Grid.Column="1" Margin="10"
-                   HorizontalAlignment="Center" Grid.Row="3" MinWidth="360" Appearance="Primary"/>
+        <ui:Button Height="60" Click="SelectFile_Click" Padding="20,0,20,0" Grid.Column="1" Margin="20,20,0,10" FontSize="20"
+                   Grid.Row="3" MinWidth="360" Appearance="Primary">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ui:SymbolIcon Symbol="TriangleRight32" Margin="0,0,8,0"/>
+                <TextBlock Text="运行" FontSize="20" VerticalAlignment="Center"/>
+            </StackPanel>
+        </ui:Button>
+        
+        
+        
+        
+        
     </Grid>
 
 </Page>

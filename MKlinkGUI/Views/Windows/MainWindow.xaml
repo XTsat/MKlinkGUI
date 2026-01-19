@@ -58,7 +58,7 @@
       CloseWindowByDoubleClickOnIcon="True"
     >
       <ui:TitleBar.Icon>
-        <ui:ImageIcon Source="pack://application:,,,/Assets/wpfui-icon-256.png" />
+        <ui:ImageIcon Source="pack://application:,,,/Assets/wpfui-icon-256.png" Margin="0,-5,0,0" />
       </ui:TitleBar.Icon>
     </ui:TitleBar>
   </Grid>

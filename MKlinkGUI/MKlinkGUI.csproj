@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -8,6 +8,7 @@
     <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Configurations>Debug;Release;Ui</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,5 +32,9 @@
     <Resource Include="Assets\wpfui-icon-256.png" />
     <Resource Include="Assets\wpfui-icon-1024.png" />
   </ItemGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Ui' ">
+    <ApplicationManifest>app.Ui.manifest</ApplicationManifest>
+  </PropertyGroup>
 
 </Project>

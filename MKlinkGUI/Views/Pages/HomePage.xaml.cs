@@ -1,5 +1,11 @@
 ﻿using MKlinkGUI.ViewModels.Pages;
 using Wpf.Ui.Abstractions.Controls;
+using Microsoft.Win32;
+using System;
+using System.IO;
+using System.Windows;
+using System.Windows.Forms;
+using Wpf.Ui.Controls;
 
 namespace MKlinkGUI.Views.Pages
 {
@@ -15,40 +21,80 @@ namespace MKlinkGUI.Views.Pages
             InitializeComponent();
         }
     
-    private void SelectFile_Click(object sender, RoutedEventArgs e)
+        private void SelectFile_Click(object sender, RoutedEventArgs e)
         {
-            var openFileDialog = new Microsoft.Win32.OpenFileDialog();
-            // 设置默认路径
-            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            // 筛选文件类型
-            openFileDialog.Filter = "所有文件 (*.*)|*.*";
 
-            if (openFileDialog.ShowDialog() == true)
+            var button = sender as Wpf.Ui.Controls.Button;
+            System.Windows.Controls.TextBox? targetTextBox = null;
+
+            if (button == SourceOpenButton)
             {
-                // 选中文件路径赋值文本框
-                EditableFileAddressTextBox.Text = openFileDialog.FileName;
+                targetTextBox = SourceTextBox;
             }
-        }
-
-        private void SelectFolder_Click(object sender, RoutedEventArgs e)
-        {
-            // 1. 替换为文件夹选择对话框（需添加 System.Windows.Forms 引用）
-            using (var folderDialog = new System.Windows.Forms.FolderBrowserDialog())
+            else if (button == TargetOpenButton)
             {
-                // 设置默认路径（和原逻辑一致）
-                folderDialog.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                // 设置对话框描述
-                folderDialog.Description = "请选择目标文件夹";
+                targetTextBox = TargetTextBox;
+            }
+            if (targetTextBox == null) return;
+            // 判断切换按钮状态
+            bool isFolderMode = (FindName("FolderToggle") as ToggleSwitch)?.IsChecked == true;
 
-                // 2. 打开文件夹选择对话框
-                if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (isFolderMode)
+            {
+                // 文件夹选择逻辑
+                using var folderDialog = new FolderBrowserDialog();
                 {
-                    // 3. 将选中的文件夹路径赋值给文本框
-                    EditableFileAddressTextBox.Text = folderDialog.SelectedPath;
+                    folderDialog.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer);
+
+                    if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        targetTextBox.Text = folderDialog.SelectedPath;
+                    }
+                }
+            }
+            else
+            {
+                // 文件选择逻辑
+                var openFileDialog = new Microsoft.Win32.OpenFileDialog();
+                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer);
+
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    targetTextBox.Text = openFileDialog.FileName;
                 }
             }
         }
-    }
 
+        // 拖动时显示允许放置的光标
+        private void TextBox_PreviewDragOver(object sender, System.Windows.DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            {
+                e.Effects = System.Windows.DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effects = System.Windows.DragDropEffects.None;
+            }
+            e.Handled = true;
+        }
+
+        // 获取文件/文件夹路径填入文本框
+        private void TextBox_Drop(object sender, System.Windows.DragEventArgs e)
+        {
+            var textBox = sender as System.Windows.Controls.TextBox;
+            if (textBox == null) return;
+
+            string[] files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
+            if (files != null && files.Length > 0)
+            {
+                // 只获取第一个拖入的文件/文件夹路径
+                string path = files[0];
+                textBox.Text = path;
+            }
+        }
+
+
+    }
 
 }

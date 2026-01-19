@@ -1,3 +1,8 @@
 <Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <BuildType Name="Ui" />
+  </Configurations>
   <Project Path="MKlinkGUI/MKlinkGUI.csproj" />
 </Solution>

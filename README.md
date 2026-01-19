@@ -1,6 +1,8 @@
 # MKlink
 
-![Home](MKlinkGUI/Resources/Home.png)
+<p align="center"><img src="MKlinkGUI/Resources/Home.png" width="500" alt="Software pictures"></p>
+
+---
 
 ## 软件介绍
 
