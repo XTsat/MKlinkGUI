@@ -266,7 +266,7 @@ namespace MKlinkGUI.Views.Pages
             {
                 linkType = "/D"; // 符号链接
             }
-            else if (((System.Windows.Controls.RadioButton)this.FindName("JunctionRadio")).IsChecked == true)
+            else if (((System.Windows.Controls.RadioButton)this.FindName("FolderLinkRadio")).IsChecked == true)
             {
                 linkType = "/J"; // 目录链接
             }
@@ -284,7 +284,7 @@ namespace MKlinkGUI.Views.Pages
             {
                 return "/D"; // 符号链接
             }
-            else if (((System.Windows.Controls.RadioButton)this.FindName("JunctionRadio")).IsChecked == true)
+            else if (((System.Windows.Controls.RadioButton)this.FindName("FolderLinkRadio")).IsChecked == true)
             {
                 return "/J"; // 目录链接
             }

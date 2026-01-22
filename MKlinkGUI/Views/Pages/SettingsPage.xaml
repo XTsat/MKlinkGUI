@@ -7,6 +7,7 @@
   xmlns:local="clr-namespace:MKlinkGUI.Views.Pages"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+  xmlns:properties="clr-namespace:MKlinkGUI.Resources.Localization"
   Title="SettingsPage"
   d:DataContext="{d:DesignInstance local:SettingsPage,
                                      IsDesignTimeCreatable=False}"
@@ -21,13 +22,13 @@
     <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
   </Page.Resources>
   <StackPanel>
-    <TextBlock FontSize="20" FontWeight="Medium" Text="主题" />
-    <TextBlock Margin="0,12,0,0" Text="颜色设置" />
+    <TextBlock FontSize="20" FontWeight="Medium" Text="{x:Static properties:Lang.Set_Theme}" />
+    <TextBlock Margin="0,12,0,0" Text="{x:Static properties:Lang.Set_Theme_ColorPreferences}" />
     <RadioButton
       Margin="0,12,0,0"
       Command="{Binding ViewModel.ChangeThemeCommand, Mode=OneWay}"
       CommandParameter="theme_light"
-      Content="Light"
+      Content="{x:Static properties:Lang.Set_Theme_ColorPreferences_Light}"
       GroupName="themeSelect"
       IsChecked="{Binding ViewModel.CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}"
     />
@@ -35,12 +36,12 @@
       Margin="0,8,0,0"
       Command="{Binding ViewModel.ChangeThemeCommand, Mode=OneWay}"
       CommandParameter="theme_dark"
-      Content="Dark"
+      Content="{x:Static properties:Lang.Set_Theme_ColorPreferences_Dark}"
       GroupName="themeSelect"
       IsChecked="{Binding ViewModel.CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}"
     />
-    <TextBlock Margin="0,12,0,0" Text="语言设置" />
-    <TextBlock Margin="0,24,0,0" FontSize="20" FontWeight="Medium" Text="关于" />
+    <TextBlock Margin="0,12,0,0" Text="{x:Static properties:Lang.Set_Theme_i18n}" />
+    <TextBlock Margin="0,24,0,0" FontSize="20" FontWeight="Medium" Text="{x:Static properties:Lang.Set_About}" />
     <TextBlock Margin="0,12,0,12" Text="{Binding ViewModel.AppVersion, Mode=OneWay}" />
     <ui:HyperlinkButton Grid.Column="0" Content="GitHub" Icon="{ui:SymbolIcon Link24}" 
                         NavigateUri="https://github.com/XTsat/MklinkGUI" />

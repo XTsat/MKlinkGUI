@@ -13,7 +13,7 @@ namespace MKlinkGUI.ViewModels.Windows
         {
             new NavigationViewItem()
             {
-                Content = "主页",
+                Content = MKlinkGUI.Resources.Localization.Lang.Nav_Home,
                 Icon = new SymbolIcon { Symbol = SymbolRegular.Home24 },
                 TargetPageType = typeof(Views.Pages.HomePage)
             },
@@ -30,7 +30,7 @@ namespace MKlinkGUI.ViewModels.Windows
         {
             new NavigationViewItem()
             {
-                Content = "设置",
+                Content = MKlinkGUI.Resources.Localization.Lang.Nav_Setting,
                 Icon = new SymbolIcon { Symbol = SymbolRegular.Settings24 },
                 TargetPageType = typeof(Views.Pages.SettingsPage)
             }

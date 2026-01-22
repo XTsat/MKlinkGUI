@@ -6,6 +6,7 @@
   xmlns:local="clr-namespace:MKlinkGUI.Views.Pages"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+  xmlns:properties="clr-namespace:MKlinkGUI.Resources.Localization"
   Title="HomePage"
   d:DataContext="{d:DesignInstance local:HomePage,
                                      IsDesignTimeCreatable=False}"
@@ -18,10 +19,10 @@
 >
     <Page.Resources>
         <Style x:Key="OpenButtonTextStyle" TargetType="TextBlock">
-            <Setter Property="Text" Value="打开文件"/>
+            <Setter Property="Text" Value="{x:Static properties:Lang.Home_Btn_OpenFile}"/>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsChecked, ElementName=FolderToggle}" Value="True">
-                    <Setter Property="Text" Value="打开文件夹"/>
+                    <Setter Property="Text" Value="{x:Static properties:Lang.Home_Btn_OpenFolder}"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -48,22 +49,19 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <ui:TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" TextAlignment="Right" Padding="0,0,10,0">
-            源位置:
-        </ui:TextBlock>
+        <ui:TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" TextAlignment="Right" Padding="0,0,10,0" 
+                      Text="{x:Static properties:Lang.Home_Path_SourcePath}"/>
 
-        <ui:TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" TextAlignment="Right" Padding="0,0,10,0">
-            目标位置:
-        </ui:TextBlock>
+        <ui:TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" TextAlignment="Right" Padding="0,0,10,0"
+                      Text="{x:Static properties:Lang.Home_Path_TargetPath}"/>
 
-        <ui:TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" TextAlignment="Right" Padding="0,0,10,0">
-            模式:
-        </ui:TextBlock>
+        <ui:TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" TextAlignment="Right" Padding="0,0,10,0"
+                      Text="{x:Static properties:Lang.Home_Mode}"/>
 
-        <ui:TextBox x:Name="SourceTextBox" PlaceholderText="选择源位置" Height="36" MinWidth="180"
+        <ui:TextBox x:Name="SourceTextBox" PlaceholderText="{x:Static properties:Lang.Home_Path_SourcePath_Value}" Height="36" MinWidth="180"
                     VerticalContentAlignment="Center" Margin="10,0,10,0" Grid.Column="1" Grid.Row="0"
                     AllowDrop="True" Drop="TextBox_Drop" PreviewDragOver="TextBox_PreviewDragOver" KeyDown="TextBox_KeyDown"
-                    ToolTip="管理员权限下拖放可能失效&#10;可以使用复制粘贴获取文件位置"/>
+                    ToolTip="{x:Static properties:Lang.Home_Path_SourcePath_Tip}"/>
 
         <ui:Button x:Name="SourceOpenButton" Click="SelectFile_Click" Height="36" Padding="12,0,12,0" Grid.Row="0" Grid.Column="2" HorizontalContentAlignment="Left" >
             <ui:Button.Content>
@@ -74,10 +72,10 @@
             </ui:Button.Icon>
         </ui:Button>
 
-        <ui:TextBox x:Name="TargetTextBox" PlaceholderText="选择目标位置" Height="36" MinWidth="180"
+        <ui:TextBox x:Name="TargetTextBox" PlaceholderText="{x:Static properties:Lang.Home_Path_TargetPath_Value}" Height="36" MinWidth="180"
                     VerticalContentAlignment="Center" Margin="10,0,10,0" Grid.Column="1" Grid.Row="1" 
                     AllowDrop="True" Drop="TextBox_Drop" PreviewDragOver="TextBox_PreviewDragOver" Cursor="IBeam" KeyDown="TextBox_KeyDown"
-                    ToolTip="管理员权限下拖放可能失效&#10;可以使用复制粘贴获取文件位置"/>
+                    ToolTip="{x:Static properties:Lang.Home_Path_TargetPath_Tip}"/>
 
         <ui:Button x:Name="TargetOpenButton" Click="SelectFile_Click" Height="36" Padding="12,0,12,0" Grid.Row="1" Grid.Column="2" HorizontalContentAlignment="Left" >
             <ui:Button.Content>
@@ -90,32 +88,32 @@
 
         <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left" MinWidth="300">
             <RadioButton x:Name="SymbolicLinkRadio"
-                    Content="符号链接 /D" Padding="10,0,20,0"
+                    Content="{x:Static properties:Lang.Home_Mode_SymbolicLinkRadio}" Padding="10,0,20,0"
                     GroupName="radio_group_one" IsChecked="True"
                     ToolTip="@todo" Checked="LinkTypeChanged" />
-            <RadioButton x:Name="JunctionRadio"
-                    Content="目录链接 /J" Padding="20,0,20,0"
+            <RadioButton x:Name="FolderLinkRadio"
+                    Content="{x:Static properties:Lang.Home_Mode_FolderLinkRadio}" Padding="20,0,20,0"
                     GroupName="radio_group_one" 
                     ToolTip="@todo" Checked="LinkTypeChanged" />
             <RadioButton x:Name="HardLinkRadio"
-                    Content="硬链接 /H" Padding="20,0,20,0"
+                    Content="{x:Static properties:Lang.Home_Mode_HardLinkRadio}" Padding="20,0,20,0"
                     GroupName="radio_group_one" 
                     ToolTip="@todo" Checked="LinkTypeChanged"  />
         </StackPanel>
 
-        <ui:ToggleSwitch x:Name="FolderToggle" Grid.Column="2" Grid.Row="2" OffContent="文件" OnContent="文件夹" IsChecked="True"/>
+        <ui:ToggleSwitch x:Name="FolderToggle" Grid.Column="2" Grid.Row="2" OffContent="{x:Static properties:Lang.Home_Mode_File}" OnContent="{x:Static properties:Lang.Home_Mode_Folder}" IsChecked="True"/>
 
         <ui:Button x:Name="RunButton" Height="60" Click="RunButton_Click" Padding="20,0,20,0" Grid.Column="1" Margin="20,20,0,10" FontSize="20"
                    Grid.Row="3" MinWidth="360" Appearance="Primary">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <ui:SymbolIcon Symbol="TriangleRight32" Margin="0,0,8,0"/>
-                <TextBlock Text="运行" FontSize="20" VerticalAlignment="Center"/>
+                <TextBlock Text="{x:Static properties:Lang.Home_Btn_Run}" FontSize="20" VerticalAlignment="Center"/>
             </StackPanel>
         </ui:Button>
 
         <StackPanel Grid.Row="3" Grid.Column="2" VerticalAlignment="Center">
             <ui:Button x:Name="RunAsAdminButton" 
-                       Content="管理员权限" Height="36"
+                       Content="{x:Static properties:Lang.Home_Btn_Admin}" Height="36"
                        Icon="{ui:SymbolIcon Symbol=Shield24}"
                        Click="RunAsAdminButton_Click"
                        Appearance="Secondary" />
