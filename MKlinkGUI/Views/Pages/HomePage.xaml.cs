@@ -6,6 +6,8 @@ using System.IO;
 using System.Windows;
 using System.Windows.Forms;
 using Wpf.Ui.Controls;
+using System.Diagnostics;
+using System.Security.Principal;
 
 namespace MKlinkGUI.Views.Pages
 {
@@ -19,7 +21,115 @@ namespace MKlinkGUI.Views.Pages
             DataContext = this;
 
             InitializeComponent();
+
+            // 初始化时根据默认选中的链接类型设置文件/文件夹切换按钮状态
+            //UpdateFolderToggleState();
+
+            this.Loaded += (sender, e) =>
+            {
+                var sourceTextBox = this.FindName("SourceTextBox") as Wpf.Ui.Controls.TextBox;
+                var targetTextBox = this.FindName("TargetTextBox") as Wpf.Ui.Controls.TextBox;
+
+                if (sourceTextBox != null)
+                {
+                    sourceTextBox.PreviewKeyDown += TextBox_KeyDown;
+                }
+
+                if (targetTextBox != null)
+                {
+                    targetTextBox.PreviewKeyDown += TextBox_KeyDown;
+                }
+
+                // 检查当前是否已经是管理员权限，如果是则隐藏"以管理员身份运行"按钮
+                var runAsAdminButton = this.FindName("RunAsAdminButton") as Wpf.Ui.Controls.Button;
+                if (runAsAdminButton != null)
+                {
+                    if (IsAdministrator())
+                    {
+                        runAsAdminButton.Visibility = Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        runAsAdminButton.Visibility = Visibility.Visible;
+                    }
+                }
+            };
         }
+
+        private void RunAsAdminButton_Click(object sender, RoutedEventArgs e)
+        {
+            RunAsAdministrator();
+        }
+
+        private void RunAsAdministrator()
+        {
+            try
+            {
+                // 检查当前是否已经是管理员权限
+                if (IsAdministrator())
+                {
+                    var messageBox = new Wpf.Ui.Controls.MessageBox
+                    {
+                        Title = "提示",
+                        Content = new TextBlock()
+                        {
+                            Text = "应用程序已经在管理员模式下运行！",
+                            TextWrapping = TextWrapping.Wrap
+                        },
+                        PrimaryButtonText = "确定"
+                    };
+                    _ = messageBox.ShowDialogAsync(true);
+                    return;
+                }
+
+                // 获取当前执行的应用程序路径
+                string exePath = Process.GetCurrentProcess().MainModule.FileName;
+
+                // 创建一个新的进程启动信息
+                ProcessStartInfo startInfo = new ProcessStartInfo
+                {
+                    FileName = exePath,
+                    UseShellExecute = true,
+                    Verb = "runas" // 请求管理员权限
+                };
+
+                // 启动新进程
+                Process.Start(startInfo);
+
+                // 关闭当前实例
+                System.Windows.Application.Current.Shutdown();
+            }
+            catch (Exception ex)
+            {
+                var messageBox = new Wpf.Ui.Controls.MessageBox
+                {
+                    Title = "错误",
+                    Content = new TextBlock()
+                    {
+                        Text = $"无法以管理员身份运行应用程序：{ex.Message}",
+                        TextWrapping = TextWrapping.Wrap
+                    },
+                    PrimaryButtonText = "确定"
+                };
+                _ = messageBox.ShowDialogAsync(true);
+            }
+        }
+
+        public static bool IsAdministrator()
+        {
+            try
+            {
+                WindowsIdentity identity = WindowsIdentity.GetCurrent();
+                WindowsPrincipal principal = new WindowsPrincipal(identity);
+                return principal.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
     
         private void SelectFile_Click(object sender, RoutedEventArgs e)
         {
@@ -82,7 +192,7 @@ namespace MKlinkGUI.Views.Pages
         // 获取文件/文件夹路径填入文本框
         private void TextBox_Drop(object sender, System.Windows.DragEventArgs e)
         {
-            var textBox = sender as System.Windows.Controls.TextBox;
+            var textBox = sender as Wpf.Ui.Controls.TextBox;
             if (textBox == null) return;
 
             string[] files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
@@ -91,6 +201,267 @@ namespace MKlinkGUI.Views.Pages
                 // 只获取第一个拖入的文件/文件夹路径
                 string path = files[0];
                 textBox.Text = path;
+            }
+        }
+
+        // 处理文本框的键盘事件，支持粘贴功能
+        private void TextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.V && (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) == System.Windows.Input.ModifierKeys.Control)
+            {
+                var textBox = sender as Wpf.Ui.Controls.TextBox;
+                if (textBox != null)
+                {
+                    // 处理粘贴操作
+                    if (System.Windows.Clipboard.ContainsFileDropList())
+                    {
+                        // 如果剪贴板包含文件列表，获取第一个文件/文件夹路径
+                        var fileDropList = System.Windows.Clipboard.GetFileDropList();
+                        if (fileDropList.Count > 0)
+                        {
+                            textBox.Text = fileDropList[0]; // 只取第一个文件/文件夹
+                            e.Handled = true; // 标记事件已处理
+                        }
+                    }
+                    else if (System.Windows.Clipboard.ContainsText())
+                    {
+                        // 如果剪贴板包含文本，直接粘贴
+                        textBox.Text = System.Windows.Clipboard.GetText();
+                        e.Handled = true; // 标记事件已处理
+                    }
+                }
+            }
+        }
+
+        private async void RunButton_Click(object sender, RoutedEventArgs e)
+        {
+            var sourceTextBox = this.FindName("SourceTextBox") as Wpf.Ui.Controls.TextBox;
+            var targetTextBox = this.FindName("TargetTextBox") as Wpf.Ui.Controls.TextBox;
+            
+            string sourcePath = sourceTextBox?.Text?.Trim();
+            string targetPath = targetTextBox?.Text?.Trim();
+
+            if (string.IsNullOrEmpty(sourcePath) || string.IsNullOrEmpty(targetPath))
+            {
+                var messageBox = new Wpf.Ui.Controls.MessageBox
+                {
+                    Title = "提示",
+                    Content = new TextBlock()
+                    {
+                        Text = "请填写完整的源位置和目标位置！",
+                        TextWrapping = TextWrapping.Wrap
+                    },
+                    PrimaryButtonText = "确定"
+                };
+                _ = await messageBox.ShowDialogAsync(true);
+                return;
+            }
+
+            // 获取选中的链接类型
+            string linkType = "";
+            if (((System.Windows.Controls.RadioButton)this.FindName("SymbolicLinkRadio")).IsChecked == true)
+            {
+                linkType = "/D"; // 符号链接
+            }
+            else if (((System.Windows.Controls.RadioButton)this.FindName("JunctionRadio")).IsChecked == true)
+            {
+                linkType = "/J"; // 目录链接
+            }
+            else if (((System.Windows.Controls.RadioButton)this.FindName("HardLinkRadio")).IsChecked == true)
+            {
+                linkType = "/H"; // 硬链接
+            }
+
+            await ExecuteMklinkCommand(sourcePath, targetPath, linkType);
+        }
+
+        private string GetSelectedLinkType()
+        {
+            if (((System.Windows.Controls.RadioButton)this.FindName("SymbolicLinkRadio")).IsChecked == true)
+            {
+                return "/D"; // 符号链接
+            }
+            else if (((System.Windows.Controls.RadioButton)this.FindName("JunctionRadio")).IsChecked == true)
+            {
+                return "/J"; // 目录链接
+            }
+            else if (((System.Windows.Controls.RadioButton)this.FindName("HardLinkRadio")).IsChecked == true)
+            {
+                return "/H"; // 硬链接
+            }
+            return "/D"; // 默认符号链接
+        }
+
+        // 根据链接类型自动设置文件/文件夹模式
+        private void UpdateFolderToggleState()
+        {
+            var folderToggle = FindName("FolderToggle") as ToggleSwitch;
+            if (folderToggle == null) return;
+
+            string linkType = GetSelectedLinkType();
+            
+            // 目录链接(/J)时，必须是文件夹模式
+            if (linkType == "/J")
+            {
+                folderToggle.IsChecked = true;      // 设置为文件夹模式
+                folderToggle.IsEnabled = false;     // 禁用切换
+            }
+            // 硬链接(/H)时，必须是文件模式
+            else if (linkType == "/H")
+            {
+                folderToggle.IsChecked = false;     // 设置为文件模式
+                folderToggle.IsEnabled = false;     // 禁用切换
+            }
+            // 符号链接(/D)时，允许用户手动切换
+            else if (linkType == "/D")
+            {
+                folderToggle.IsEnabled = true;      // 启用切换
+                // 保持当前用户选择的状态，不做改变
+            }
+        }
+
+        private void LinkTypeChanged(object sender, RoutedEventArgs e)
+        {
+            UpdateFolderToggleState();
+        }
+
+        private async Task ExecuteMklinkCommand(string sourcePath, string targetPath, string linkType)
+        {
+            try
+            {
+                // 根据链接类型判断源路径应该是文件还是文件夹
+                bool sourceShouldBeFile = linkType == "/H"; // 硬链接只能用于文件
+                bool sourceShouldBeDir = linkType == "/J"; // 目录链接只能用于文件夹
+                bool sourceCanBeBoth = linkType == "/D"; // 符号链接可用于文件或文件夹
+
+                // 验证源路径是否存在及类型是否匹配
+                bool sourceExists = false;
+                if (sourceShouldBeFile) //硬链接
+                {
+                    sourceExists = File.Exists(sourcePath);
+                }
+                else if (sourceShouldBeDir) //目录链接
+                {
+                    sourceExists = Directory.Exists(sourcePath);
+                }
+                else if (sourceCanBeBoth) // 符号链接
+                {
+                    sourceExists = File.Exists(sourcePath) || Directory.Exists(sourcePath);
+                }
+                
+                if (!sourceExists)
+                {
+                    // 使用WPF UI的MessageBox - 正确的API
+                    var messageBox = new Wpf.Ui.Controls.MessageBox
+                    {
+                        Title = "错误",
+                        Content = new TextBlock()
+                        {
+                            Text = $"源路径不存在或类型不匹配：{sourcePath}",
+                            TextWrapping = TextWrapping.Wrap
+                        },
+                        PrimaryButtonText = "确定"
+                    };
+                    _ = await messageBox.ShowDialogAsync(true);
+                    return;
+                }
+
+                // 对于目录链接，如果目标是一个已存在的目录，则在该目录内创建与源目录同名的子目录
+                if (linkType == "/J" && Directory.Exists(targetPath))
+                {
+                    string sourceDirectoryName = Path.GetFileName(sourcePath);
+                    targetPath = Path.Combine(targetPath, sourceDirectoryName);
+                }
+                
+                // 如果目标已存在，询问是否覆盖
+                if (File.Exists(targetPath) || Directory.Exists(targetPath))
+                {
+                    // 使用WPF UI的MessageBox - 正确的API
+                    var messageBox = new Wpf.Ui.Controls.MessageBox
+                    {
+                        Title = "警告",
+                        Content = new TextBlock()
+                        {
+                            Text = $"目标路径已存在：{targetPath}\n是否继续？",
+                            TextWrapping = TextWrapping.Wrap
+                        },
+                        //SecondaryButtonText = "继续",
+                        PrimaryButtonText = "继续",
+                        //PrimaryButtonText = "取消"
+                        SecondaryButtonText = "取消",
+                        IsCloseButtonEnabled = false
+                    };
+                    var result = await messageBox.ShowDialogAsync(true);
+                    
+                    if (result == Wpf.Ui.Controls.MessageBoxResult.Secondary) // 如果用户选择取消，则返回
+                        return;
+                }
+
+                ProcessStartInfo startInfo = new ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    Arguments = $"/c mklink {linkType} \"{targetPath}\" \"{sourcePath}\"",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true
+                };
+
+                using (Process process = Process.Start(startInfo))
+                {
+                    string output = process.StandardOutput.ReadToEnd();
+                    string error = process.StandardError.ReadToEnd();
+                    
+                    process.WaitForExit();
+
+                    if (process.ExitCode == 0)
+                    {
+                        // 使用WPF UI的MessageBox - 正确的API
+                        var messageBox = new Wpf.Ui.Controls.MessageBox
+                        {
+                            Title = "成功",
+                            Content = new TextBlock()
+                            {
+                                Text = $"链接创建成功！\n{output}",
+                                TextWrapping = TextWrapping.Wrap
+                            },
+                            PrimaryButtonText = "确定",
+                            SecondaryButtonText = "取消",
+                            IsCloseButtonEnabled = false
+                        };
+                        _ = await messageBox.ShowDialogAsync(true);
+                    }
+                    else
+                    {
+                        // 使用WPF UI的MessageBox - 正确的API
+                        var messageBox = new Wpf.Ui.Controls.MessageBox
+                        {
+                            Title = "错误",
+                            Content = new TextBlock()
+                            {
+                                Text = $"链接创建失败！\n错误信息：{error}",
+                                TextWrapping = TextWrapping.Wrap
+                            },
+                            PrimaryButtonText = "确定"
+                        };
+                        _ = await messageBox.ShowDialogAsync(true);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // 使用WPF UI的MessageBox - 正确的API
+                var messageBox = new Wpf.Ui.Controls.MessageBox
+                {
+                    Title = "错误",
+                    Content = new TextBlock()
+                    {
+                        Text = $"执行mklink命令时发生异常：{ex.Message}",
+                        TextWrapping = TextWrapping.Wrap
+                    },
+                    PrimaryButtonText = "确定"
+                };
+                _ = await messageBox.ShowDialogAsync(true);
             }
         }
 

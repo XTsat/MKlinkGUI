@@ -33,8 +33,4 @@
     <Resource Include="Assets\wpfui-icon-1024.png" />
   </ItemGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Ui' ">
-    <ApplicationManifest>app.Ui.manifest</ApplicationManifest>
-  </PropertyGroup>
-
 </Project>

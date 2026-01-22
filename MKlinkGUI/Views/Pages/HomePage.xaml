@@ -62,7 +62,8 @@
 
         <ui:TextBox x:Name="SourceTextBox" PlaceholderText="选择源位置" Height="36" MinWidth="180"
                     VerticalContentAlignment="Center" Margin="10,0,10,0" Grid.Column="1" Grid.Row="0"
-                    AllowDrop="True" Drop="TextBox_Drop" PreviewDragOver="TextBox_PreviewDragOver"/>
+                    AllowDrop="True" Drop="TextBox_Drop" PreviewDragOver="TextBox_PreviewDragOver" KeyDown="TextBox_KeyDown"
+                    ToolTip="管理员权限下拖放可能失效&#10;可以使用复制粘贴获取文件位置"/>
 
         <ui:Button x:Name="SourceOpenButton" Click="SelectFile_Click" Height="36" Padding="12,0,12,0" Grid.Row="0" Grid.Column="2" HorizontalContentAlignment="Left" >
             <ui:Button.Content>
@@ -75,7 +76,8 @@
 
         <ui:TextBox x:Name="TargetTextBox" PlaceholderText="选择目标位置" Height="36" MinWidth="180"
                     VerticalContentAlignment="Center" Margin="10,0,10,0" Grid.Column="1" Grid.Row="1" 
-                    AllowDrop="True" Drop="TextBox_Drop" PreviewDragOver="TextBox_PreviewDragOver" Cursor="IBeam"/>
+                    AllowDrop="True" Drop="TextBox_Drop" PreviewDragOver="TextBox_PreviewDragOver" Cursor="IBeam" KeyDown="TextBox_KeyDown"
+                    ToolTip="管理员权限下拖放可能失效&#10;可以使用复制粘贴获取文件位置"/>
 
         <ui:Button x:Name="TargetOpenButton" Click="SelectFile_Click" Height="36" Padding="12,0,12,0" Grid.Row="1" Grid.Column="2" HorizontalContentAlignment="Left" >
             <ui:Button.Content>
@@ -87,33 +89,37 @@
         </ui:Button>
 
         <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left" MinWidth="300">
-            <RadioButton
+            <RadioButton x:Name="SymbolicLinkRadio"
                     Content="符号链接 /D" Padding="10,0,20,0"
                     GroupName="radio_group_one" IsChecked="True"
-                    ToolTip="@todo" />
-            <RadioButton
+                    ToolTip="@todo" Checked="LinkTypeChanged" />
+            <RadioButton x:Name="JunctionRadio"
                     Content="目录链接 /J" Padding="20,0,20,0"
                     GroupName="radio_group_one" 
-                    ToolTip="@todo" />
-            <RadioButton
+                    ToolTip="@todo" Checked="LinkTypeChanged" />
+            <RadioButton x:Name="HardLinkRadio"
                     Content="硬链接 /H" Padding="20,0,20,0"
                     GroupName="radio_group_one" 
-                    ToolTip="@todo" />
+                    ToolTip="@todo" Checked="LinkTypeChanged"  />
         </StackPanel>
 
         <ui:ToggleSwitch x:Name="FolderToggle" Grid.Column="2" Grid.Row="2" OffContent="文件" OnContent="文件夹" IsChecked="True"/>
 
-        <ui:Button Height="60" Click="SelectFile_Click" Padding="20,0,20,0" Grid.Column="1" Margin="20,20,0,10" FontSize="20"
+        <ui:Button x:Name="RunButton" Height="60" Click="RunButton_Click" Padding="20,0,20,0" Grid.Column="1" Margin="20,20,0,10" FontSize="20"
                    Grid.Row="3" MinWidth="360" Appearance="Primary">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <ui:SymbolIcon Symbol="TriangleRight32" Margin="0,0,8,0"/>
                 <TextBlock Text="运行" FontSize="20" VerticalAlignment="Center"/>
             </StackPanel>
         </ui:Button>
-        
-        
-        
-        
+
+        <StackPanel Grid.Row="3" Grid.Column="2" VerticalAlignment="Center">
+            <ui:Button x:Name="RunAsAdminButton" 
+                       Content="管理员权限" Height="36"
+                       Icon="{ui:SymbolIcon Symbol=Shield24}"
+                       Click="RunAsAdminButton_Click"
+                       Appearance="Secondary" />
+        </StackPanel>
         
     </Grid>
 
