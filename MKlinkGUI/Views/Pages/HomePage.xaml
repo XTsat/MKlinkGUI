@@ -86,7 +86,7 @@
             </ui:Button.Icon>
         </ui:Button>
 
-        <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left" MinWidth="300">
+        <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" MinWidth="300">
             <RadioButton x:Name="SymbolicLinkRadio"
                     Content="{x:Static properties:Lang.Home_Mode_SymbolicLinkRadio}" Padding="10,0,20,0"
                     GroupName="radio_group_one" IsChecked="True"
@@ -103,22 +103,34 @@
 
         <ui:ToggleSwitch x:Name="FolderToggle" Grid.Column="2" Grid.Row="2" OffContent="{x:Static properties:Lang.Home_Mode_File}" OnContent="{x:Static properties:Lang.Home_Mode_Folder}" IsChecked="True"/>
 
-        <ui:Button x:Name="RunButton" Height="60" Click="RunButton_Click" Padding="20,0,20,0" Grid.Column="1" Margin="20,20,0,10" FontSize="20"
-                   Grid.Row="3" MinWidth="360" Appearance="Primary">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <ui:SymbolIcon Symbol="TriangleRight32" Margin="0,0,8,0"/>
-                <TextBlock Text="{x:Static properties:Lang.Home_Btn_Run}" FontSize="20" VerticalAlignment="Center"/>
-            </StackPanel>
-        </ui:Button>
+        <StackPanel Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Center">
 
-        <StackPanel Grid.Row="3" Grid.Column="2" VerticalAlignment="Center">
-            <ui:Button x:Name="RunAsAdminButton" 
-                       Content="{x:Static properties:Lang.Home_Btn_Admin}" Height="36"
-                       Icon="{ui:SymbolIcon Symbol=Shield24}"
-                       Click="RunAsAdminButton_Click"
-                       Appearance="Secondary" />
+            <ui:Button x:Name="RunButton" Height="60" Click="RunButton_Click" Padding="10,0,10,0" Grid.Column="1" Margin="10,10,0,10" FontSize="20"
+                   Grid.Row="3" MinWidth="300" Appearance="Primary">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <ui:SymbolIcon Symbol="TriangleRight32" Margin="0,0,8,0"/>
+                    <TextBlock Text="{x:Static properties:Lang.Home_Btn_Run}" FontSize="20" VerticalAlignment="Center"/>
+                </StackPanel>
+            </ui:Button>
+
+            <ui:Button x:Name="CopyCommandButton" Height="60" Click="CopyCommand_Click" Padding="10,0,10,0" Grid.Column="1" Margin="10,10,0,10" FontSize="20"
+                   Grid.Row="3" MinWidth="60" Appearance="Secondary">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <ui:SymbolIcon Symbol="Copy24" Margin="0,0,8,0"/>
+                    <TextBlock Text="{x:Static properties:Lang.Home_Btn_CopyCommand}" FontSize="20" VerticalAlignment="Center"/>
+                </StackPanel>
+            </ui:Button>
+
+            <ui:Button x:Name="RunAsAdminButton" Height="36" Click="RunAsAdminButton_Click" Padding="10,0,10,0" Grid.Column="1" Margin="10,10,0,10" FontSize="20"
+                   Grid.Row="3" MinWidth="60" Appearance="Danger" Background="#fbfbfb">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <ui:SymbolIcon Symbol="Shield24" Margin="0,0,8,0" FontSize="14"/>
+                    <TextBlock Text="{x:Static properties:Lang.Home_Btn_Admin}" FontSize="14" VerticalAlignment="Center"/>
+                </StackPanel>
+            </ui:Button>
+
         </StackPanel>
-        
+
     </Grid>
 
 </Page>

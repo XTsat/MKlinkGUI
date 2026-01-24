@@ -70,6 +70,15 @@ namespace MKlinkGUI.Resources.Localization {
         }
         
         /// <summary>
+        ///   查找类似 复制命令 的本地化字符串。
+        /// </summary>
+        public static string Home_Btn_CopyCommand {
+            get {
+                return ResourceManager.GetString("Home_Btn_CopyCommand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 打开文件 的本地化字符串。
         /// </summary>
         public static string Home_Btn_OpenFile {
@@ -396,6 +405,15 @@ namespace MKlinkGUI.Resources.Localization {
         public static string UniOk {
             get {
                 return ResourceManager.GetString("UniOk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 成功 的本地化字符串。
+        /// </summary>
+        public static string UniSuccess {
+            get {
+                return ResourceManager.GetString("UniSuccess", resourceCulture);
             }
         }
     }

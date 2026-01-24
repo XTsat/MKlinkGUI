@@ -222,4 +222,10 @@
   <data name="UniOk" xml:space="preserve">
     <value>确定</value>
   </data>
+  <data name="UniSuccess" xml:space="preserve">
+    <value>成功</value>
+  </data>
+  <data name="Home_Btn_CopyCommand" xml:space="preserve">
+    <value>复制命令</value>
+  </data>
 </root>

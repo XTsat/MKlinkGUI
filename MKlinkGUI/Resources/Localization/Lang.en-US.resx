@@ -174,4 +174,7 @@
   <data name="Nav_Setting" xml:space="preserve">
     <value>Setting</value>
   </data>
+  <data name="UniSuccess" xml:space="preserve">
+    <value>Success</value>
+  </data>
 </root>

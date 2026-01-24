@@ -326,6 +326,77 @@ namespace MKlinkGUI.Views.Pages
 
         #endregion RunType
 
+        #region RunCopy
+
+        private void CopyCommand_Click(object sender, RoutedEventArgs e)
+        {
+            var sourceTextBox = this.FindName("SourceTextBox") as Wpf.Ui.Controls.TextBox;
+            var targetTextBox = this.FindName("TargetTextBox") as Wpf.Ui.Controls.TextBox;
+
+            string sourcePath = sourceTextBox?.Text?.Trim() ?? string.Empty;
+            string targetPath = targetTextBox?.Text?.Trim() ?? string.Empty;
+
+            if (string.IsNullOrEmpty(sourcePath) || string.IsNullOrEmpty(targetPath))
+            {
+                var messageBox = new Wpf.Ui.Controls.MessageBox
+                {
+                    Title = MKlinkGUI.Resources.Localization.Lang.UniError,
+                    Content = new TextBlock()
+                    {
+                        Text = "请填写完整的源路径和目标路径",
+                        TextWrapping = TextWrapping.Wrap
+                    },
+                    SecondaryButtonText = MKlinkGUI.Resources.Localization.Lang.UniClose,
+                    IsCloseButtonEnabled = false
+                };
+                _ = messageBox.ShowDialogAsync(true);
+                return;
+            }
+
+            // 获取选中的链接类型
+            string linkType = GetSelectedLinkType();
+
+            // 构建mklink命令
+            string command = $"mklink {linkType} \"{targetPath}\" \"{sourcePath}\"";
+
+            // 将命令复制到剪贴板
+            try
+            {
+                System.Windows.Clipboard.SetText(command);
+                
+                // 显示成功消息
+                var messageBox = new Wpf.Ui.Controls.MessageBox
+                {
+                    Title = MKlinkGUI.Resources.Localization.Lang.UniSuccess,
+                    Content = new TextBlock()
+                    {
+                        Text = $"命令已复制到剪贴板：\n{command}",
+                        TextWrapping = TextWrapping.Wrap
+                    },
+                    PrimaryButtonText = MKlinkGUI.Resources.Localization.Lang.UniOk,
+                    IsCloseButtonEnabled = false
+                };
+                _ = messageBox.ShowDialogAsync(true);
+            }
+            catch (Exception ex)
+            {
+                var messageBox = new Wpf.Ui.Controls.MessageBox
+                {
+                    Title = MKlinkGUI.Resources.Localization.Lang.UniError,
+                    Content = new TextBlock()
+                    {
+                        Text = $"复制命令到剪贴板失败：{ex.Message}",
+                        TextWrapping = TextWrapping.Wrap
+                    },
+                    SecondaryButtonText = MKlinkGUI.Resources.Localization.Lang.UniClose,
+                    IsCloseButtonEnabled = false
+                };
+                _ = messageBox.ShowDialogAsync(true);
+            }
+        }
+
+        #endregion RunCopy
+
         private void LinkTypeChanged(object sender, RoutedEventArgs e)
         {
             UpdateFolderToggleState();
@@ -425,7 +496,7 @@ namespace MKlinkGUI.Views.Pages
                         {
                             var messageBox = new Wpf.Ui.Controls.MessageBox
                             {
-                                Title = "成功",
+                                Title = MKlinkGUI.Resources.Localization.Lang.UniSuccess,
                                 Content = new TextBlock()
                                 {
                                     Text = $"链接创建成功！\n{output}",
