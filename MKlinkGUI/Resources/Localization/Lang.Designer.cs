@@ -133,6 +133,19 @@ namespace MKlinkGUI.Resources.Localization {
         }
         
         /// <summary>
+        ///   查找类似 源位置：本地
+        ///类型：文件夹
+        ///删除：不会影响源
+        ///移动/复制：对文件夹内容进行操作
+        ///适用场景：改变存储位置不影响程序运行 的本地化字符串。
+        /// </summary>
+        public static string Home_Mode_FolderLinkRadioTip {
+            get {
+                return ResourceManager.GetString("Home_Mode_FolderLinkRadioTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 硬链接 /H 的本地化字符串。
         /// </summary>
         public static string Home_Mode_HardLinkRadio {
@@ -142,11 +155,38 @@ namespace MKlinkGUI.Resources.Localization {
         }
         
         /// <summary>
+        ///   查找类似 源位置：本硬盘
+        ///类型：文件
+        ///删除：始终保留最后一份文件
+        ///移动/复制：对文件本身进行操作
+        ///适用场景：同一文件被多次引用，任何修改都会同步 的本地化字符串。
+        /// </summary>
+        public static string Home_Mode_HardLinkRadioTip {
+            get {
+                return ResourceManager.GetString("Home_Mode_HardLinkRadioTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 符号链接 /D 的本地化字符串。
         /// </summary>
         public static string Home_Mode_SymbolicLinkRadio {
             get {
                 return ResourceManager.GetString("Home_Mode_SymbolicLinkRadio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 源位置：本地或网络
+        ///类型：文件/文件夹
+        ///删除：不会影响源
+        ///移动/复制：对链接本身进行操作
+        ///适用场景：在不同路径访问同一文件或目录
+        ///特殊：需要管理员权限或开发者模式 的本地化字符串。
+        /// </summary>
+        public static string Home_Mode_SymbolicLinkRadioTip {
+            get {
+                return ResourceManager.GetString("Home_Mode_SymbolicLinkRadioTip", resourceCulture);
             }
         }
         

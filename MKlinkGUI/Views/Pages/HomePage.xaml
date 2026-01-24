@@ -90,15 +90,15 @@
             <RadioButton x:Name="SymbolicLinkRadio"
                     Content="{x:Static properties:Lang.Home_Mode_SymbolicLinkRadio}" Padding="10,0,20,0"
                     GroupName="radio_group_one" IsChecked="True"
-                    ToolTip="@todo" Checked="LinkTypeChanged" />
+                    ToolTip="{x:Static properties:Lang.Home_Mode_SymbolicLinkRadioTip}" Checked="LinkTypeChanged" />
             <RadioButton x:Name="FolderLinkRadio"
                     Content="{x:Static properties:Lang.Home_Mode_FolderLinkRadio}" Padding="20,0,20,0"
                     GroupName="radio_group_one" 
-                    ToolTip="@todo" Checked="LinkTypeChanged" />
+                    ToolTip="{x:Static properties:Lang.Home_Mode_FolderLinkRadioTip}" Checked="LinkTypeChanged" />
             <RadioButton x:Name="HardLinkRadio"
                     Content="{x:Static properties:Lang.Home_Mode_HardLinkRadio}" Padding="20,0,20,0"
                     GroupName="radio_group_one" 
-                    ToolTip="@todo" Checked="LinkTypeChanged"  />
+                    ToolTip="{x:Static properties:Lang.Home_Mode_HardLinkRadioTip}" Checked="LinkTypeChanged"  />
         </StackPanel>
 
         <ui:ToggleSwitch x:Name="FolderToggle" Grid.Column="2" Grid.Row="2" OffContent="{x:Static properties:Lang.Home_Mode_File}" OnContent="{x:Static properties:Lang.Home_Mode_Folder}" IsChecked="True"/>

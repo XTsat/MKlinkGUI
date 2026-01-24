@@ -182,4 +182,26 @@
   <data name="Set_Theme_i18n_RestartToApply" xml:space="preserve">
     <value>@todo 需要重启</value>
   </data>
+  <data name="Home_Mode_SymbolicLinkRadioTip" xml:space="preserve">
+    <value>源位置：本地或网络
+类型：文件/文件夹
+删除：不会影响源
+移动/复制：对链接本身进行操作
+适用场景：在不同路径访问同一文件或目录
+特殊：需要管理员权限或开发者模式</value>
+  </data>
+  <data name="Home_Mode_FolderLinkRadioTip" xml:space="preserve">
+    <value>源位置：本地
+类型：文件夹
+删除：不会影响源
+移动/复制：对文件夹内容进行操作
+适用场景：改变存储位置不影响程序运行</value>
+  </data>
+  <data name="Home_Mode_HardLinkRadioTip" xml:space="preserve">
+    <value>源位置：本硬盘
+类型：文件
+删除：始终保留最后一份文件
+移动/复制：对文件本身进行操作
+适用场景：同一文件被多次引用，任何修改都会同步</value>
+  </data>
 </root>
