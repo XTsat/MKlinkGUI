@@ -54,6 +54,8 @@ namespace MKlinkGUI.Views.Pages
             };
         }
 
+        #region Admin
+
         private void RunAsAdminButton_Click(object sender, RoutedEventArgs e)
         {
             RunAsAdministrator();
@@ -133,6 +135,10 @@ namespace MKlinkGUI.Views.Pages
                 return false;
             }
         }
+
+        #endregion Admin
+
+        #region Folder
 
         private void SelectFile_Click(object sender, RoutedEventArgs e)
         {
@@ -236,6 +242,10 @@ namespace MKlinkGUI.Views.Pages
             }
         }
 
+        #endregion Folder
+
+        #region Run
+
         private async void RunButton_Click(object sender, RoutedEventArgs e)
         {
             var sourceTextBox = this.FindName("SourceTextBox") as Wpf.Ui.Controls.TextBox;
@@ -248,32 +258,23 @@ namespace MKlinkGUI.Views.Pages
             {
                 var messageBox = new Wpf.Ui.Controls.MessageBox
                 {
-                    Title = "提示",
+                    Title = MKlinkGUI.Resources.Localization.Lang.UniError,
                     Content = new TextBlock()
                     {
-                        Text = "请填写完整的源位置和目标位置！",
+                        Text = "请填写完整的源路径和目标路径",
                         TextWrapping = TextWrapping.Wrap
                     },
-                    PrimaryButtonText = "确定"
+                    SecondaryButtonText = MKlinkGUI.Resources.Localization.Lang.UniClose,
+                    IsCloseButtonEnabled = false
                 };
                 _ = await messageBox.ShowDialogAsync(true);
                 return;
             }
 
+            #region RunType
+
             // 获取选中的链接类型
-            string linkType = "";
-            if (((System.Windows.Controls.RadioButton)this.FindName("SymbolicLinkRadio")).IsChecked == true)
-            {
-                linkType = "/D"; // 符号链接
-            }
-            else if (((System.Windows.Controls.RadioButton)this.FindName("FolderLinkRadio")).IsChecked == true)
-            {
-                linkType = "/J"; // 目录链接
-            }
-            else if (((System.Windows.Controls.RadioButton)this.FindName("HardLinkRadio")).IsChecked == true)
-            {
-                linkType = "/H"; // 硬链接
-            }
+            string linkType = GetSelectedLinkType();
 
             await ExecuteMklinkCommand(sourcePath, targetPath, linkType);
         }
@@ -302,7 +303,7 @@ namespace MKlinkGUI.Views.Pages
             if (folderToggle == null) return;
 
             string linkType = GetSelectedLinkType();
-            
+
             // 目录链接(/J)时，必须是文件夹模式
             if (linkType == "/J")
             {
@@ -323,10 +324,14 @@ namespace MKlinkGUI.Views.Pages
             }
         }
 
+        #endregion RunType
+
         private void LinkTypeChanged(object sender, RoutedEventArgs e)
         {
             UpdateFolderToggleState();
         }
+
+        #region RunTip
 
         private async Task ExecuteMklinkCommand(string sourcePath, string targetPath, string linkType)
         {
@@ -351,18 +356,19 @@ namespace MKlinkGUI.Views.Pages
                 {
                     sourceExists = File.Exists(sourcePath) || Directory.Exists(sourcePath);
                 }
-                
+
                 if (!sourceExists)
                 {
                     var messageBox = new Wpf.Ui.Controls.MessageBox
                     {
-                        Title = "错误",
+                        Title = MKlinkGUI.Resources.Localization.Lang.UniError,
                         Content = new TextBlock()
                         {
                             Text = $"源路径不存在或类型不匹配：{sourcePath}",
                             TextWrapping = TextWrapping.Wrap
                         },
-                        PrimaryButtonText = "确定"
+                        SecondaryButtonText = MKlinkGUI.Resources.Localization.Lang.UniClose,
+                        IsCloseButtonEnabled = false
                     };
                     _ = await messageBox.ShowDialogAsync(true);
                     return;
@@ -374,24 +380,24 @@ namespace MKlinkGUI.Views.Pages
                     string sourceDirectoryName = Path.GetFileName(sourcePath);
                     targetPath = Path.Combine(targetPath, sourceDirectoryName);
                 }
-                
+
                 // 如果目标已存在，询问是否覆盖
                 if (File.Exists(targetPath) || Directory.Exists(targetPath))
                 {
                     var messageBox = new Wpf.Ui.Controls.MessageBox
                     {
-                        Title = "警告",
+                        Title = MKlinkGUI.Resources.Localization.Lang.UniDanger,
                         Content = new TextBlock()
                         {
                             Text = $"目标路径已存在：{targetPath}\n是否继续？",
                             TextWrapping = TextWrapping.Wrap
                         },
-                        PrimaryButtonText = "继续",
-                        SecondaryButtonText = "取消",
+                        PrimaryButtonText = MKlinkGUI.Resources.Localization.Lang.UniConfirm,
+                        SecondaryButtonText = MKlinkGUI.Resources.Localization.Lang.UniCancel,
                         IsCloseButtonEnabled = false
                     };
                     var result = await messageBox.ShowDialogAsync(true);
-                    
+
                     if (result == Wpf.Ui.Controls.MessageBoxResult.Secondary) // 如果取消，则返回
                         return;
                 }
@@ -412,7 +418,7 @@ namespace MKlinkGUI.Views.Pages
                     {
                         string output = process.StandardOutput.ReadToEnd();
                         string error = process.StandardError.ReadToEnd();
-                        
+
                         process.WaitForExit();
 
                         if (process.ExitCode == 0)
@@ -425,8 +431,7 @@ namespace MKlinkGUI.Views.Pages
                                     Text = $"链接创建成功！\n{output}",
                                     TextWrapping = TextWrapping.Wrap
                                 },
-                                PrimaryButtonText = "确定",
-                                SecondaryButtonText = "取消",
+                                PrimaryButtonText = MKlinkGUI.Resources.Localization.Lang.UniOk,
                                 IsCloseButtonEnabled = false
                             };
                             _ = await messageBox.ShowDialogAsync(true);
@@ -435,13 +440,14 @@ namespace MKlinkGUI.Views.Pages
                         {
                             var messageBox = new Wpf.Ui.Controls.MessageBox
                             {
-                                Title = "错误",
+                                Title = MKlinkGUI.Resources.Localization.Lang.UniError,
                                 Content = new TextBlock()
                                 {
                                     Text = $"链接创建失败！\n错误信息：{error}",
                                     TextWrapping = TextWrapping.Wrap
                                 },
-                                PrimaryButtonText = "确定"
+                                SecondaryButtonText = MKlinkGUI.Resources.Localization.Lang.UniClose,
+                                IsCloseButtonEnabled = false
                             };
                             _ = await messageBox.ShowDialogAsync(true);
                         }
@@ -450,13 +456,14 @@ namespace MKlinkGUI.Views.Pages
                     {
                         var messageBox = new Wpf.Ui.Controls.MessageBox
                         {
-                            Title = "错误",
+                            Title = MKlinkGUI.Resources.Localization.Lang.UniError,
                             Content = new TextBlock()
                             {
                                 Text = "无法启动进程来执行mklink命令",
                                 TextWrapping = TextWrapping.Wrap
                             },
-                            PrimaryButtonText = "确定"
+                            SecondaryButtonText = MKlinkGUI.Resources.Localization.Lang.UniClose,
+                            IsCloseButtonEnabled = false
                         };
                         _ = await messageBox.ShowDialogAsync(true);
                     }
@@ -466,17 +473,22 @@ namespace MKlinkGUI.Views.Pages
             {
                 var messageBox = new Wpf.Ui.Controls.MessageBox
                 {
-                    Title = "错误",
+                    Title = MKlinkGUI.Resources.Localization.Lang.UniError,
                     Content = new TextBlock()
                     {
                         Text = $"执行mklink命令时发生异常：{ex.Message}",
                         TextWrapping = TextWrapping.Wrap
                     },
-                    PrimaryButtonText = "确定"
+                    SecondaryButtonText = MKlinkGUI.Resources.Localization.Lang.UniClose,
+                    IsCloseButtonEnabled = false
                 };
                 _ = await messageBox.ShowDialogAsync(true);
             }
         }
+
+        #endregion RunTip
+
+        #endregion Run
 
 
     }

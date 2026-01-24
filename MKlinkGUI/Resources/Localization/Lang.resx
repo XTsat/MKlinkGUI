@@ -204,4 +204,22 @@
 移动/复制：对文件本身进行操作
 适用场景：同一文件被多次引用，任何修改都会同步</value>
   </data>
+  <data name="UniClose" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="UniError" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="UniDanger" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="UniConfirm" xml:space="preserve">
+    <value>继续</value>
+  </data>
+  <data name="UniCancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="UniOk" xml:space="preserve">
+    <value>确定</value>
+  </data>
 </root>

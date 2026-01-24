@@ -344,5 +344,59 @@ namespace MKlinkGUI.Resources.Localization {
                 return ResourceManager.GetString("Uni_Version", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   查找类似 取消 的本地化字符串。
+        /// </summary>
+        public static string UniCancel {
+            get {
+                return ResourceManager.GetString("UniCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 关闭 的本地化字符串。
+        /// </summary>
+        public static string UniClose {
+            get {
+                return ResourceManager.GetString("UniClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 继续 的本地化字符串。
+        /// </summary>
+        public static string UniConfirm {
+            get {
+                return ResourceManager.GetString("UniConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 警告 的本地化字符串。
+        /// </summary>
+        public static string UniDanger {
+            get {
+                return ResourceManager.GetString("UniDanger", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 错误 的本地化字符串。
+        /// </summary>
+        public static string UniError {
+            get {
+                return ResourceManager.GetString("UniError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 确定 的本地化字符串。
+        /// </summary>
+        public static string UniOk {
+            get {
+                return ResourceManager.GetString("UniOk", resourceCulture);
+            }
+        }
     }
 }
