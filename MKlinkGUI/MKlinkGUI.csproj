@@ -48,4 +48,9 @@
     </EmbeddedResource>
   </ItemGroup>
 
+<PropertyGroup>
+	<!-- 包含所有依赖 -->
+	<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+</PropertyGroup>
+
 </Project>
